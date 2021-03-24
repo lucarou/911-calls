@@ -22,7 +22,75 @@ GET <nom de votre index>/_count
 À vous de jouer ! Écrivez les requêtes ElasticSearch permettant de résoudre les problèmes posés.
 
 ```
-TODO : ajouter les requêtes ElasticSearch ici
+Nombre d'appels par catégorie:
+GET /calls/_search 
+  {"size": 0, 
+  "aggs": 
+    {"category": 
+      {"terms": 
+        {"field": "category.keyword"}}}}
+
+Les trois mois ayant le plus d'appels:
+GET /calls/_search
+{
+  "size": 0,
+  "aggs": {
+    "month": {
+      "terms": {
+        "field": "month",
+        "size": 3,
+        "order": {
+          "_count": "desc"
+        }
+      }
+    }
+  }
+}
+
+Requete des villes de la drogue:
+GET /calls/_search
+{
+  "query": {
+    "term": {
+      "title.keyword": {
+        "value": "EMS: OVERDOSE"
+      }
+    }
+  },
+  "size": 0,
+  "aggs": {
+    "twp": {
+      "terms": {
+        "field": "twp.keyword",
+        "size": 3,
+        "order": {
+          "_count": "desc"
+        }
+      }
+    }
+  }
+}
+
+Requete des villes à 500m de Lansdale:
+GET /calls/_count
+{
+  "query": {
+    "bool": {
+      "must": {
+        "match_all": {}
+      },
+      "filter": {
+        "geo_distance": {
+          "distance": "500m",
+          "loc": [
+            -75.283783,
+            40.241493
+          ]
+        }
+      }
+    }
+  }
+}
 ```
 
 ## Kibana

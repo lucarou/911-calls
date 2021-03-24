@@ -32,7 +32,18 @@ Afin de répondre aux différents problèmes, vous allez avoir besoin de créer 
 À vous de jouer ! Écrivez les requêtes MongoDB permettant de résoudre les problèmes posés.
 
 ```
-TODO : ajouter les requêtes MongoDB ici
+Le nombre d'appels par catégorie:
+db.calls.find({"category":"EMS"}).count()
+db.calls.find({"category":"Traffic"}).count()
+db.calls.find({"category":"Fire"}).count()
+
+Le top 3 des mois avec le plus d'appels:
+db.calls.aggregate([{$group : {_id:"$month", total:{$sum:1}}}, {$sort: {total:-1}},{$limit:3}])
+
+Le top 3 des villes avec le plus d'overdoses:
+db.calls.aggregate([{$match: {"title":"EMS: OVERDOSE"}},{$group : {_id:"$twp", total:{$sum:1}}}, {$sort: {total:-1}},{$limit:3}])
+
+
 ```
 
 Vous allez sûrement avoir besoin de vous inspirer des points suivants de la documentation :

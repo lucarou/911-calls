@@ -8,7 +8,7 @@ const {
 } = require('process');
 
 const MONGO_URL = 'mongodb://localhost:27017/';
-const DB_NAME = '911-calls';
+const DB_NAME = 'dbcalls';
 const COLLECTION_NAME = 'calls';
 
 const insertCalls = async function (db, callback) {
@@ -16,11 +16,23 @@ const insertCalls = async function (db, callback) {
   await dropCollectionIfExists(db, collection);
 
   const calls = [];
-  fs.createReadStream('../911.csv')
+  fs.createReadStream('./911.csv')
     .pipe(csv())
     .on('data', data => {
 
       const call = {
+        "loc": [parseFloat(data.lng), parseFloat(data.lat)],
+        "lat": data.lat,
+        "lng": data.lng,
+        "desc":data.desc,
+        "zip": data.zip,
+        "title":data.title,
+        "category":data.title.split(":")[0],
+        "month":data.timeStamp.substring(0,7),
+        "timestamp":data.timeStamp,
+        "twp":data.twp,
+        "addr":data.addr,
+        "e":data.e
       }; // TODO créer l'objet call à partir de la ligne
 
       calls.push(call);

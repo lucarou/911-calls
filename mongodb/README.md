@@ -43,6 +43,8 @@ db.calls.aggregate([{$group : {_id:"$month", total:{$sum:1}}}, {$sort: {total:-1
 Le top 3 des villes avec le plus d'overdoses:
 db.calls.aggregate([{$match: {"title":"EMS: OVERDOSE"}},{$group : {_id:"$twp", total:{$sum:1}}}, {$sort: {total:-1}},{$limit:3}])
 
+Le nombre d'appels dans un rayon de 500m autour de Lansdale:
+db.calls.find({loc:{$near:{ $geometry: {type: "Point", coordinates: [ -75.283783, 40.241493 ] },$minDistance: 0,$maxDistance: 500}}}).count()
 
 ```
 
